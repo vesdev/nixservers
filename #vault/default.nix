@@ -1,4 +1,4 @@
-{ pkgs, ... }: {
+{ config, pkgs, ... }: {
   imports = [ ./hardware-configuration.nix ];
   boot.tmp.cleanOnBoot = true;
   zramSwap.enable = true;
@@ -29,13 +29,13 @@
   environment.systemPackages = [ pkgs.helix ];
 
   services.vaultwarden = {
-    enable = true;
     config = {
       DOMAIN = "https://vault.ves.dev";
-      ADMIN_TOKEN =
-        "wHOQMaaVRoaPVhHpZevPDM5TBTLlDWD9a06eE6+oy9TIRoBtuj6KSec+cKqZDxS+";
       ROCKET_PORT = 8222;
     };
+
+    environmentFile = config.age.secrets."vault.env".path;
+    enable = true;
   };
 
   services.caddy = {
