@@ -4,6 +4,8 @@
   inputs.deploy-rs.url = "github:serokell/deploy-rs";
   inputs.agenix.url = "github:ryantm/agenix";
   inputs.disko.url = "github:nix-community/disko";
+  inputs.websurfx.url = "github:neon-mmd/websurfx";
+  inputs.websurfx.inputs.nixpkgs.follows = "nixpkgs";
 
   outputs =
     {
@@ -12,6 +14,7 @@
       deploy-rs,
       agenix,
       disko,
+      websurfx,
     }:
     let
       system = "x86_64-linux";
@@ -21,6 +24,9 @@
 
       nixosConfigurations.vesdev = nixpkgs.lib.nixosSystem {
         inherit system;
+        specialArgs = {
+          inherit websurfx;
+        };
         modules = [
           agenix.nixosModules.default
           disko.nixosModules.disko
