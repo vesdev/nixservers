@@ -4,7 +4,6 @@
   inputs.deploy-rs.url = "github:serokell/deploy-rs";
   inputs.agenix.url = "github:ryantm/agenix";
   inputs.disko.url = "github:nix-community/disko";
-  inputs.vuekobot.url = "github:vesdev/vuekobot";
 
   outputs =
     {
@@ -13,7 +12,6 @@
       deploy-rs,
       agenix,
       disko,
-      vuekobot,
     }:
     let
       system = "x86_64-linux";
@@ -21,27 +19,21 @@
     in
     {
 
-      nixosConfigurations.vueko = nixpkgs.lib.nixosSystem {
+      nixosConfigurations.vesdev = nixpkgs.lib.nixosSystem {
         inherit system;
         modules = [
           agenix.nixosModules.default
           disko.nixosModules.disko
-          vuekobot.nixosModules.default
-          { age.secrets."vueko.toml".file = ./secrets/vueko.toml.age; }
-          {
-            services.vueko-backend.package = vuekobot.packages.${system}.vueko-backend;
-            services.vueko-frontend.package = vuekobot.packages.${system}.vueko-frontend;
-          }
-          ./${"#vueko"}
+          ./${"#vesdev"}
         ];
       };
 
-      deploy.nodes.vueko = {
-        hostname = "vueko.ves.dev";
-        profiles.vueko = {
+      deploy.nodes.vesdev = {
+        hostname = "ves.dev";
+        profiles.vesdev = {
           sshUser = "ves";
           user = "root";
-          path = deploy-rs.${system}.activate.nixos self.nixosConfigurations.vueko;
+          path = deploy-rs.lib.${system}.activate.nixos self.nixosConfigurations.vesdev;
         };
       };
 
