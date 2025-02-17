@@ -9,7 +9,7 @@ in
     vesdev
   ];
 
-  "kavita.age".publicKeys = [
+  "spambotsen.toml.age".publicKeys = [
     ves
     vesdev
   ];
